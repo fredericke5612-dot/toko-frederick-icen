@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toko Frecen - Belanja Online Lengkap & Terpercaya</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+  <!-- NAVIGATION HEADER -->
+  <header class="sticky top-0 z-50 bg-indigo-700 text-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Logo -->
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="filterCategory('all')">
+        <div class="w-10 h-10 bg-white text-indigo-700 rounded-xl flex items-center justify-center font-black text-2xl shadow">
+          F
+        </div>
+        <div>
+          <h1 class="text-xl font-extrabold tracking-wide">Toko Frecen</h1>
+          <p class="text-xs text-indigo-200">Official Store & Marketplace</p>
+        </div>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="flex-1 max-w-xl mx-2 min-w-[250px]">
+        <div class="relative">
+          <input type="text" id="searchInput" onkeyup="filterProducts()" placeholder="Cari 100+ produk di Toko Frecen..." class="w-full pl-10 pr-4 py-2 rounded-xl text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400 text-sm shadow-inner">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400"></i>
+        </div>
+      </div>
+
+      <!-- Navigation & Action Buttons -->
+      <div class="flex items-center space-x-4">
+        <!-- Cart Button -->
+        <button onclick="toggleCartModal()" class="relative bg-indigo-800 hover:bg-indigo-900 px-3 py-2 rounded-xl transition flex items-center space-x-2">
+          <i class="fa-solid fa-cart-shopping text-lg text-yellow-300"></i>
+          <span class="text-xs font-semibold hidden sm:inline">Keranjang</span>
+          <span id="cartCount" class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">0</span>
+        </button>
+
+        <!-- User Profile / Login Button -->
+        <div id="userNavArea">
+          <button onclick="openLoginModal()" class="bg-yellow-400 hover:bg-yellow-500 text-indigo-900 font-bold px-4 py-2 rounded-xl text-sm transition shadow">
+            Masuk / Daftar
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
+
+    <!-- HERO BANNER -->
+    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-6 sm:p-10 text-white mb-8 shadow-xl relative overflow-hidden">
+      <div class="relative z-10 max-w-2xl">
+        <span class="bg-yellow-400 text-indigo-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">Promo Spesial Frecen</span>
+        <h2 class="text-2xl sm:text-4xl font-extrabold mb-2 leading-tight">Selamat Datang di Toko Frecen!</h2>
+        <p class="text-indigo-100 text-sm sm:text-base mb-6">Temukan 100 pilihan produk terbaik dari 10 kategori favoritmu dengan harga terbaik dan pengiriman cepat.</p>
+        <a href="#kategori" class="bg-white text-indigo-700 hover:bg-indigo-50 font-bold px-6 py-2.5 rounded-xl text-sm inline-block shadow transition">Jelajahi Produk</a>
+      </div>
+      <i class="fa-solid fa-bag-shopping text-indigo-500/20 text-9xl absolute -right-6 -bottom-10 pointer-events-none"></i>
+    </div>
+
+    <!-- CATEGORY BAR (10 Categories) -->
+    <div id="kategori" class="mb-8">
+      <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+        <i class="fa-solid fa-layer-group text-indigo-600"></i> Kategori Produk (10)
+      </h3>
+      <div class="flex gap-2 overflow-x-auto pb-3 hide-scrollbar" id="categoryButtons">
+        <!-- Buttons JS generated -->
+      </div>
+    </div>
+
+    <!-- PRODUCT DISPLAY SECTION -->
+    <div class="mb-6 flex justify-between items-center">
+      <h3 id="currentCategoryTitle" class="text-xl font-bold text-slate-800">Semua Produk (100)</h3>
+      <span id="productCountBadge" class="text-xs bg-slate-200 text-slate-700 font-semibold px-3 py-1 rounded-full">100 Produk</span>
+    </div>
+
+    <!-- PRODUCT GRID -->
+    <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <!-- Products will be injected via JS -->
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-900 text-slate-400 text-sm mt-12 py-8 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <div class="flex justify-center items-center space-x-2 mb-3">
+        <div class="w-7 h-7 bg-indigo-600 text-white rounded-lg flex items-center justify-center font-black">F</div>
+        <span class="text-white font-bold text-lg">Toko Frecen</span>
+      </div>
+      <p class="text-xs text-slate-500 mb-4">Platform belanja online pilihan keluarga. Menyediakan 10 kategori lengkap untuk segala kebutuhan Anda.</p>
+      <p class="text-xs text-slate-600">&copy; 2026 Toko Frecen. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- MODAL: LOGIN / REGISTER -->
+  <div id="loginModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+      <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+
+      <div class="text-center mb-6">
+        <div class="w-12 h-12 bg-indigo-100 text-indigo-700 rounded-2xl flex items-center justify-center font-black text-2xl mx-auto mb-2">F</div>
+        <h3 class="text-xl font-bold text-slate-800">Masuk Akun Frecen</h3>
+        <p class="text-xs text-slate-500 mt-1">Masukan akun kamu untuk melanjutkan belanja</p>
+      </div>
+
+      <form onsubmit="handleLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Username / Email</label>
+          <input type="text" id="loginUsername" required placeholder="Contoh: user / admin" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Kata Sandi</label>
+          <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-sm transition shadow-lg shadow-indigo-200">
+          Masuk Sekarang
+        </button>
+      </form>
+
+      <div class="mt-4 text-center text-xs text-slate-500">
+        Belum punya akun? <a href="#" onclick="alert('Silahkan ketik username dan password bebas lalu klik Masuk!')" class="text-indigo-600 font-bold hover:underline">Daftar Akun Baru</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: KERANJANG BELANJA -->
+  <div id="cartModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex justify-end hidden">
+    <div class="bg-white w-full max-w-md h-full flex flex-col shadow-2xl">
+      <!-- Cart Header -->
+      <div class="p-4 bg-indigo-700 text-white flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <h3 class="font-bold text-lg">Keranjang Toko Frecen</h3>
+        </div>
+        <button onclick="toggleCartModal()" class="text-white/80 hover:text-white">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Cart Items Container -->
+      <div id="cartItemsList" class="flex-1 overflow-y-auto p-4 space-y-3">
+        <!-- Items inserted via JS -->
+      </div>
+
+      <!-- Cart Footer -->
+      <div class="p-4 border-t border-slate-200 bg-slate-50 space-y-3">
+        <div class="flex justify-between items-center text-sm">
+          <span class="text-slate-600 font-medium">Total Pembayaran:</span>
+          <span id="cartTotalPrice" class="text-lg font-extrabold text-indigo-700">Rp 0</span>
+        </div>
+        <button onclick="checkout()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-sm transition shadow-lg shadow-emerald-100 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-credit-card"></i> Checkout Sekarang
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT CODE -->
+  <script>
+    const categories = [
+      { id: 'elektronik', name: 'Elektronik', icon: 'fa-tv' },
+      { id: 'fashion_pria', name: 'Fashion Pria', icon: 'fa-shirt' },
+      { id: 'fashion_wanita', name: 'Fashion Wanita', icon: 'fa-vest' },
+      { id: 'makanan', name: 'Makanan & Minuman', icon: 'fa-utensils' },
+      { id: 'kecantikan', name: 'Kecantikan', icon: 'fa-pump-soap' },
+      { id: 'olahraga', name: 'Olahraga', icon: 'fa-table-tennis-paddle-ball' },
+      { id: 'otomotif', name: 'Otomotif', icon: 'fa-motorcycle' },
+      { id: 'rumah_tangga', name: 'Perabot Rumah', icon: 'fa-couch' },
+      { id: 'buku_alat_tulis', name: 'Buku & Alat Tulis', icon: 'fa-book' },
+      { id: 'mainan', name: 'Mainan & Hobi', icon: 'fa-gamepad' }
+    ];
+
+    // Data 10 Kategori x 10 Produk lengkap dengan URL Gambar Asli yang Sesuai
+    const rawData = {
+      elektronik: [
+        { name: 'Smartphone Frecen X1', img: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&auto=format&fit=crop' },
+        { name: 'Wireless Earbuds Pro', img: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400&auto=format&fit=crop' },
+        { name: 'Smartwatch Series 5', img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&auto=format&fit=crop' },
+        { name: 'Laptop Slim 14 Inch', img: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&auto=format&fit=crop' },
+        { name: 'Powerbank 20000mAh', img: 'https://images.unsplash.com/photo-1609592424109-dd9892f1b177?w=400&auto=format&fit=crop' },
+        { name: 'Speaker Bluetooth Bass', img: 'https://images.unsplash.com/photo-1545454675-3531b543be5d?w=400&auto=format&fit=crop' },
+        { name: 'Kamera Mirrorless 4K', img: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&auto=format&fit=crop' },
+        { name: 'Tablet HD 10 Inch', img: 'https://images.unsplash.com/photo-1561154464-82e9adf32764?w=400&auto=format&fit=crop' },
+        { name: 'Headset Gaming RGB', img: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=400&auto=format&fit=crop' },
+        { name: 'Charger Fast 65W', img: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=400&auto=format&fit=crop' }
+      ],
+      fashion_pria: [
+        { name: 'Kemeja Polos Premium', img: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400&auto=format&fit=crop' },
+        { name: 'Celana Chino Slimfit', img: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=400&auto=format&fit=crop' },
+        { name: 'Jaket Bomber Frecen', img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&auto=format&fit=crop' },
+        { name: 'Kaos Oversize Cotton', img: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=400&auto=format&fit=crop' },
+        { name: 'Sepatu Sneaker Casual', img: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&auto=format&fit=crop' },
+        { name: 'Sweater Hoodie Minimalis', img: 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=400&auto=format&fit=crop' },
+        { name: 'Celana Jeans Denim', img: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400&auto=format&fit=crop' },
+        { name: 'Topi Baseball Original', img: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&auto=format&fit=crop' },
+        { name: 'Dompet Kulit Asli', img: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=400&auto=format&fit=crop' },
+        { name: 'Sabuk Kulit Pria', img: 'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=400&auto=format&fit=crop' }
+      ],
+      fashion_wanita: [
+        { name: 'Dress Casual Summer', img: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=400&auto=format&fit=crop' },
+        { name: 'Blouse Wanita Elegant', img: 'https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=400&auto=format&fit=crop' },
+        { name: 'Rok Plisket Panjang', img: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=400&auto=format&fit=crop' },
+        { name: 'Cardigan Rajut Premium', img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400&auto=format&fit=crop' },
+        { name: 'Sepatu Heels 5cm', img: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400&auto=format&fit=crop' },
+        { name: 'Tas Selempang Wanita', img: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&auto=format&fit=crop' },
+        { name: 'Hijab Pasmina Silk', img: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?w=400&auto=format&fit=crop' },
+        { name: 'Jaket Denim Crop', img: 'https://images.unsplash.com/photo-1544441893-675973e31985?w=400&auto=format&fit=crop' },
+        { name: 'Flat Shoes Comfy', img: 'https://images.unsplash.com/photo-1535043934128-cf0b28d52f95?w=400&auto=format&fit=crop' },
+        { name: 'Kacamata Cat Eye', img: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400&auto=format&fit=crop' }
+      ],
+      makanan: [
+        { name: 'Kopi Susu Gula Aren 1L', img: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=400&auto=format&fit=crop' },
+        { name: 'Cokelat Hotto Premium', img: 'https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?w=400&auto=format&fit=crop' },
+        { name: 'Keripik Pedas Manis', img: 'https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=400&auto=format&fit=crop' },
+        { name: 'Madu Murni Organik', img: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&auto=format&fit=crop' },
+        { name: 'Roti Tawar Gandum', img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&auto=format&fit=crop' },
+        { name: 'Biskuit Choco Oat', img: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&auto=format&fit=crop' },
+        { name: 'Susu UHT Full Cream', img: 'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400&auto=format&fit=crop' },
+        { name: 'Keju Mozzarella 250g', img: 'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=400&auto=format&fit=crop' },
+        { name: 'Teh Hijau Celup', img: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=400&auto=format&fit=crop' },
+        { name: 'Abon Sapi Asli', img: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=400&auto=format&fit=crop' }
+      ],
+      kecantikan: [
+        { name: 'Sunscreen SPF 50+', img: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=400&auto=format&fit=crop' },
+        { name: 'Serum Brightening C', img: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&auto=format&fit=crop' },
+        { name: 'Facial Wash Gentle', img: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&auto=format&fit=crop' },
+        { name: 'Moisturizer Gel 50ml', img: 'https://images.unsplash.com/photo-1608248597262-83822b399120?w=400&auto=format&fit=crop' },
+        { name: 'Lip Cream Matte Red', img: 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=400&auto=format&fit=crop' },
+        { name: 'Micellar Water 250ml', img: 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=400&auto=format&fit=crop' },
+        { name: 'Masker Wajah Sheet', img: 'https://images.unsplash.com/photo-1567928269937-ae146e58b35a?w=400&auto=format&fit=crop' },
+        { name: 'Toner Exfoliating', img: 'https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?w=400&auto=format&fit=crop' },
+        { name: 'Body Lotion Fragrance', img: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&auto=format&fit=crop' },
+        { name: 'Cushion Natural Light', img: 'https://images.unsplash.com/photo-1522337094846-8a83020c317f?w=400&auto=format&fit=crop' }
+      ],
+      olahraga: [
+        { name: 'Raket Pingpong Pro', img: 'https://images.unsplash.com/photo-1511067007398-7e4b90cfa4bc?w=400&auto=format&fit=crop' },
+        { name: 'Bola Tenis Meja 3 Star', img: 'https://images.unsplash.com/photo-1611251122615-54602f78e472?w=400&auto=format&fit=crop' },
+        { name: 'Matras Yoga Anti Slip', img: 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=400&auto=format&fit=crop' },
+        { name: 'Dumbbell Rubber 5kg', img: 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=400&auto=format&fit=crop' },
+        { name: 'Sepatu Lari Running', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop' },
+        { name: 'Jersey Olahraga DryFit', img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&auto=format&fit=crop' },
+        { name: 'Tali Skipping Speed', img: 'https://images.unsplash.com/photo-1591291621164-2c6367723315?w=400&auto=format&fit=crop' },
+        { name: 'Tas Gym Olahraga', img: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&auto=format&fit=crop' },
+        { name: 'Botol Minum 1.5L', img: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&auto=format&fit=crop' },
+        { name: 'Deker Lutut Sport', img: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=400&auto=format&fit=crop' }
+      ],
+      otomotif: [
+        { name: 'Helm Full Face SNI', img: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=400&auto=format&fit=crop' },
+        { name: 'Oli Mesin Matic 1L', img: 'https://images.unsplash.com/photo-1615906655593-ad0386982a0f?w=400&auto=format&fit=crop' },
+        { name: 'Sarung Tangan Motor', img: 'https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?w=400&auto=format&fit=crop' },
+        { name: 'Lampu LED Motor Super', img: 'https://images.unsplash.com/photo-1508974239320-0a029497e820?w=400&auto=format&fit=crop' },
+        { name: 'Kain Lap Microfiber', img: 'https://images.unsplash.com/photo-1585421514284-efb74c2b69ba?w=400&auto=format&fit=crop' },
+        { name: 'Parfum Mobil Aromatherapy', img: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&auto=format&fit=crop' },
+        { name: 'Pembersih Rantai Motor', img: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?w=400&auto=format&fit=crop' },
+        { name: 'Jas Hujan Ponco', img: 'https://images.unsplash.com/photo-1515664069236-68a742644d97?w=400&auto=format&fit=crop' },
+        { name: 'Holder HP Stang Motor', img: 'https://images.unsplash.com/photo-1586105251261-72a756497a11?w=400&auto=format&fit=crop' },
+        { name: 'Pompa Ban Portabel', img: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=400&auto=format&fit=crop' }
+      ],
+      rumah_tangga: [
+        { name: 'Sapu Kiripik & Pengki', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&auto=format&fit=crop' },
+        { name: 'Panci Anti Lengket 24cm', img: 'https://images.unsplash.com/photo-1584992236310-6edddc08acff?w=400&auto=format&fit=crop' },
+        { name: 'Blender Juice Portable', img: 'https://images.unsplash.com/photo-1570222094114-d054a817e56b?w=400&auto=format&fit=crop' },
+        { name: 'Lampu Tidur LED Akrilik', img: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&auto=format&fit=crop' },
+        { name: 'Sprei Polos Soft Cotton', img: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=400&auto=format&fit=crop' },
+        { name: 'Kotak Tisu Kayu Estetik', img: 'https://images.unsplash.com/photo-1584589167171-541ce45f1ead?w=400&auto=format&fit=crop' },
+        { name: 'Rak Sepatu 5 Susun', img: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=400&auto=format&fit=crop' },
+        { name: 'Handuk Mandi Jumbo', img: 'https://images.unsplash.com/photo-1616627547584-bf28cee262db?w=400&auto=format&fit=crop' },
+        { name: 'Timbangan Badan Digital', img: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&auto=format&fit=crop' },
+        { name: 'Kipas Angin Meja', img: 'https://images.unsplash.com/photo-1618941706240-547f89bc3a67?w=400&auto=format&fit=crop' }
+      ],
+      buku_alat_tulis: [
+        { name: 'Buku Tulis A5 100 Lembar', img: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&auto=format&fit=crop' },
+        { name: 'Pulpen Gel Black 0.5mm', img: 'https://images.unsplash.com/photo-1585336261026-6757f541a674?w=400&auto=format&fit=crop' },
+        { name: 'Pensil 2B Box 12pcs', img: 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=400&auto=format&fit=crop' },
+        { name: 'Stabilo Highlight Set', img: 'https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=400&auto=format&fit=crop' },
+        { name: 'Buku Agenda Leather', img: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400&auto=format&fit=crop' },
+        { name: 'Gunting Stainless Medium', img: 'https://images.unsplash.com/photo-1608228088998-57828365d486?w=400&auto=format&fit=crop' },
+        { name: 'Sticky Notes Color', img: 'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=400&auto=format&fit=crop' },
+        { name: 'Penggaris Besi 30cm', img: 'https://images.unsplash.com/photo-1588072432836-e10032774350?w=400&auto=format&fit=crop' },
+        { name: 'Spidol Permanent Black', img: 'https://images.unsplash.com/photo-1616400619175-5bdb3f169739?w=400&auto=format&fit=crop' },
+        { name: 'Map File Dokumen', img: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&auto=format&fit=crop' }
+      ],
+      mainan: [
+        { name: 'Bongkar Pasang Blocks', img: 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=400&auto=format&fit=crop' },
+        { name: 'Mobil Remot Control', img: 'https://images.unsplash.com/photo-1594787318286-3d835c1d207f?w=400&auto=format&fit=crop' },
+        { name: 'Boneka Beruang Jumbo', img: 'https://images.unsplash.com/photo-1559454403-b8fb88521f11?w=400&auto=format&fit=crop' },
+        { name: 'Rubik Cube 3x3 Speed', img: 'https://images.unsplash.com/photo-1591994843349-f415893b3a6b?w=400&auto=format&fit=crop' },
+        { name: 'Puzzle Kayu Edukasi', img: 'https://images.unsplash.com/photo-1618842676088-c4d48a6a7c9d?w=400&auto=format&fit=crop' },
+        { name: 'Set Alat Melukis Kids', img: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400&auto=format&fit=crop' },
+        { name: 'Action Figure Superhero', img: 'https://images.unsplash.com/photo-1608889825205-e2397e163c20?w=400&auto=format&fit=crop' },
+        { name: 'Kartu Uno Original', img: 'https://images.unsplash.com/photo-1611195974226-a6a9be9dd763?w=400&auto=format&fit=crop' },
+        { name: 'Mainan Pasir Ajaib', img: 'https://images.unsplash.com/photo-1500989145603-8e7ef71d639e?w=400&auto=format&fit=crop' },
+        { name: 'Drone Mini Camera', img: 'https://images.unsplash.com/photo-1527977966376-1c8408f9f108?w=400&auto=format&fit=crop' }
+      ]
+    };
+
+    const products = [];
+
+    // Buat array 100 produk dengan gambar yang presisi
+    let globalId = 1;
+    categories.forEach(cat => {
+      const items = rawData[cat.id];
+      items.forEach((item) => {
+        const price = (Math.floor(Math.random() * 45) + 1) * 10000 + 5000;
+        products.push({
+          id: globalId++,
+          categoryId: cat.id,
+          name: item.name,
+          price: price,
+          rating: (4 + Math.random() * 0.9).toFixed(1),
+          sold: Math.floor(Math.random() * 500) + 10,
+          image: item.img
+        });
+      });
+    });
+
+    // STATE MANAGEMENT
+    let cart = JSON.parse(localStorage.getItem('frecen_cart')) || [];
+    let activeCategory = 'all';
+    let currentUser = localStorage.getItem('frecen_user') || null;
+
+    // INITIALIZATION
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCategoryButtons();
+      renderProducts();
+      updateCartUI();
+      checkUserLoginStatus();
+    });
+
+    // Render Kategori
+    function renderCategoryButtons() {
+      const container = document.getElementById('categoryButtons');
+      let html = `
+        <button onclick="filterCategory('all')" id="cat-btn-all" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center space-x-2 bg-indigo-600 text-white shadow">
+          <i class="fa-solid fa-border-all"></i>
+          <span>Semua (100)</span>
+        </button>
+      `;
+
+      categories.forEach(cat => {
+        html += `
+          <button onclick="filterCategory('${cat.id}')" id="cat-btn-${cat.id}" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center space-x-2 bg-white text-slate-600 border border-slate-200 hover:bg-slate-100">
+            <i class="fa-solid ${cat.icon} text-indigo-600"></i>
+            <span>${cat.name}</span>
+          </button>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    // Filter Kategori
+    function filterCategory(catId) {
+      activeCategory = catId;
+
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.className = "cat-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center space-x-2 bg-white text-slate-600 border border-slate-200 hover:bg-slate-100";
+      });
+
+      const activeBtn = document.getElementById(`cat-btn-${catId}`);
+      if(activeBtn) {
+        activeBtn.className = "cat-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center space-x-2 bg-indigo-600 text-white shadow";
+      }
+
+      const titleEl = document.getElementById('currentCategoryTitle');
+      if(catId === 'all') {
+        titleEl.textContent = 'Semua Produk (100)';
+      } else {
+        const catObj = categories.find(c => c.id === catId);
+        titleEl.textContent = `Kategori: ${catObj ? catObj.name : ''}`;
+      }
+
+      renderProducts();
+    }
+
+    // Render Products Grid
+    function renderProducts(searchQuery = '') {
+      const grid = document.getElementById('productGrid');
+      let filtered = products;
+
+      if(activeCategory !== 'all') {
+        filtered = filtered.filter(p => p.categoryId === activeCategory);
+      }
+
+      if(searchQuery.trim() !== '') {
+        filtered = filtered.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()));
+      }
+
+      document.getElementById('productCountBadge').textContent = `${filtered.length} Produk`;
+
+      if(filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-12 text-slate-400">
+            <i class="fa-solid fa-box-open text-5xl mb-3"></i>
+            <p class="text-sm font-semibold">Produk tidak ditemukan di Toko Frecen.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => `
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition duration-200 flex flex-col overflow-hidden group">
+          <div class="relative overflow-hidden bg-slate-100 aspect-square">
+            <img src="${p.image}" alt="${p.name}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <span class="absolute top-2 left-2 bg-slate-900/70 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-md">
+              <i class="fa-solid fa-star text-yellow-400"></i> ${p.rating}
+            </span>
+          </div>
+          <div class="p-3 flex flex-col flex-1 justify-between">
+            <div>
+              <h4 class="font-bold text-xs text-slate-800 line-clamp-2 leading-snug mb-1 group-hover:text-indigo-600 transition">${p.name}</h4>
+              <p class="text-xs text-slate-400 mb-2">${p.sold} Terjual</p>
+            </div>
+            <div>
+              <div class="text-sm font-extrabold text-indigo-700 mb-2">Rp ${p.price.toLocaleString('id-ID')}</div>
+              <button onclick="addToCart(${p.id})" class="w-full bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white font-bold py-1.5 rounded-lg text-xs transition flex items-center justify-center gap-1">
+                <i class="fa-solid fa-cart-plus"></i> + Keranjang
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Live Search
+    function filterProducts() {
+      const q = document.getElementById('searchInput').value;
+      renderProducts(q);
+    }
+
+    // KERANJANG BELANJA SYSTEM
+    function addToCart(productId) {
+      const prod = products.find(p => p.id === productId);
+      const existing = cart.find(item => item.id === productId);
+
+      if(existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...prod, qty: 1 });
+      }
+
+      saveCart();
+      updateCartUI();
+      alert(`✅ "${prod.name}" berhasil ditambahkan ke keranjang Toko Frecen!`);
+    }
+
+    function updateCartQty(productId, delta) {
+      const index = cart.findIndex(item => item.id === productId);
+      if(index !== -1) {
+        cart[index].qty += delta;
+        if(cart[index].qty <= 0) {
+          cart.splice(index, 1);
+        }
+      }
+      saveCart();
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById('cartCount').textContent = totalCount;
+
+      const listContainer = document.getElementById('cartItemsList');
+      
+      if(cart.length === 0) {
+        listContainer.innerHTML = `
+          <div class="text-center py-12 text-slate-400">
+            <i class="fa-solid fa-cart-flatbed text-5xl mb-3"></i>
+            <p class="text-sm font-medium">Keranjang kamu masih kosong.</p>
+          </div>
+        `;
+        document.getElementById('cartTotalPrice').textContent = 'Rp 0';
+        return;
+      }
+
+      let total = 0;
+      listContainer.innerHTML = cart.map(item => {
+        const itemTotal = item.price * item.qty;
+        total += itemTotal;
+        return `
+          <div class="flex items-center space-x-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
+            <img src="${item.image}" class="w-14 h-14 object-cover rounded-lg">
+            <div class="flex-1 min-w-0">
+              <h5 class="text-xs font-bold text-slate-800 truncate">${item.name}</h5>
+              <p class="text-xs text-indigo-600 font-semibold mt-0.5">Rp ${item.price.toLocaleString('id-ID')}</p>
+            </div>
+            <div class="flex items-center space-x-1 bg-white border border-slate-200 rounded-lg p-1">
+              <button onclick="updateCartQty(${item.id}, -1)" class="w-5 h-5 text-xs text-slate-600 hover:bg-slate-100 rounded flex items-center justify-center font-bold">-</button>
+              <span class="text-xs font-bold px-1.5">${item.qty}</span>
+              <button onclick="updateCartQty(${item.id}, 1)" class="w-5 h-5 text-xs text-slate-600 hover:bg-slate-100 rounded flex items-center justify-center font-bold">+</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('cartTotalPrice').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+    }
+
+    function saveCart() {
+      localStorage.setItem('frecen_cart', JSON.stringify(cart));
+    }
+
+    function toggleCartModal() {
+      document.getElementById('cartModal').classList.toggle('hidden');
+    }
+
+    function checkout() {
+      if(cart.length === 0) {
+        alert('Keranjang kamu masih kosong!');
+        return;
+      }
+      if(!currentUser) {
+        alert('Silakan login terlebih dahulu untuk melakukan Checkout!');
+        toggleCartModal();
+        openLoginModal();
+        return;
+      }
+
+      alert(`🎉 Terima kasih ${currentUser}! Pesanan kamu di Toko Frecen berhasil diproses.`);
+      cart = [];
+      saveCart();
+      updateCartUI();
+      toggleCartModal();
+    }
+
+    // AUTH / LOGIN SYSTEM
+    function openLoginModal() {
+      document.getElementById('loginModal').classList.remove('hidden');
+    }
+
+    function closeLoginModal() {
+      document.getElementById('loginModal').classList.add('hidden');
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const user = document.getElementById('loginUsername').value;
+      currentUser = user;
+      localStorage.setItem('frecen_user', user);
+      
+      checkUserLoginStatus();
+      closeLoginModal();
+      alert(`Selamat datang kembali, ${user}!`);
+    }
+
+    function handleLogout() {
+      currentUser = null;
+      localStorage.removeItem('frecen_user');
+      checkUserLoginStatus();
+      alert('Kamu telah keluar dari Toko Frecen.');
+    }
+
+    function checkUserLoginStatus() {
+      const navArea = document.getElementById('userNavArea');
+      if(currentUser) {
+        navArea.innerHTML = `
+          <div class="flex items-center space-x-2 bg-indigo-800 px-3 py-1.5 rounded-xl text-xs">
+            <i class="fa-solid fa-user-circle text-yellow-300 text-base"></i>
+            <span class="font-bold text-white max-w-[80px] truncate">${currentUser}</span>
+            <button onclick="handleLogout()" title="Keluar" class="text-red-300 hover:text-red-100 ml-1">
+              <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+          </div>
+        `;
+      } else {
+        navArea.innerHTML = `
+          <button onclick="openLoginModal()" class="bg-yellow-400 hover:bg-yellow-500 text-indigo-900 font-bold px-4 py-2 rounded-xl text-sm transition shadow">
+            Masuk / Daftar
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
